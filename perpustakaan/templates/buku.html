@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <h2>Daftar buku</h2>
+
+    {% for judul in title %}
+    <li>{{ judul }}</li><br>
+    {% endfor %}
+
+    {{ penulis }}
+{% endblock %}
