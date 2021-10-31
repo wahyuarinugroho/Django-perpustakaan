@@ -1,12 +1,10 @@
 from django.shortcuts import render
+from perpustakaan.models import Buku
 
 def buku(requst):
-    judul = ["belajar django","belajar python", "belajar bootstrap"]
-    penulis = "wahyu ari nugroho"
-
+    books = Buku.objects.all()
     konteks = {
-        'title': judul,
-        'penulis': penulis
+        'books': books,
     }
     return render(requst, 'buku.html', konteks)
 
