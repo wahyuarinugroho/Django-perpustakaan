@@ -2,11 +2,43 @@
 
 {% block content %}
 
-    <h2>Daftar buku</h2>
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Data Buku</h6>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <h3>
+                <a href="{% url 'tambah_buku' %}" class="btn btn-success">Tambah</a>
+            </h3>
+            <table class="table table-bordered" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Judul</th>
+                        <th>Penulis</th>
+                        <th>Penerbit</th>
+                        <th>Jumlah</th>
+                        <th>Kelompok</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for buku in books %}
+                    <tr>
+                        <td><a href="{% url 'ubah_buku' buku.id %}">{{ buku.judul }}</a></td>
+                        <td>{{ buku.penulis }}</td>
+                        <td>{{ buku.penerbit }}</td>
+                        <td>{{ buku.jumlah }}</td>
+                        <td>{{ buku.kelompok_id }}</td>
+                        <td>
+                            <a href="{% url 'hapus_Buku' buku.id %}" class="btn btn-danger">Delete</a>
+                        </td>
+                    </tr> 
+                    {% endfor %}  
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 
-    {% for buku in books %}
-    <li>{{ buku.judul }}</li>
-    {% endfor %}
-
-    {{ penulis }}
 {% endblock %}
