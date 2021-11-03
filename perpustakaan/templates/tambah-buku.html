@@ -10,7 +10,7 @@
                     <div class="alert alert-success">{{ message }}</div>
                 {% endif %}
             {% endfor %}
-            <form action="/tambah-buku/" method="post">
+            <form action="{% url 'tambah_buku' %}" method="post">
                 {% csrf_token %}
                 {{ form.as_p }}
                 <button class="btn btn-primary">Tambah</button>

@@ -24,6 +24,7 @@ def ubah_buku(request, id_buku):
 def hapus_buku(request, id_buku):
     buku = Buku.objects.filter(id=id_buku)
     buku.delete()
+    messages.success(request, "data berhasil dihapus")
     return redirect('buku')
 
 def buku(request):
