@@ -14,11 +14,13 @@
     <div class="card-body">
         <div class="table-responsive">
             <h3>
-                <a href="{% url 'tambah_buku' %}" class="btn btn-success">Tambah</a>
+                <a href="{% url 'tambah_buku' %}" class="btn btn-primary">Tambah</a>
+                <a href="{% url 'export_xlsx' %}" class="btn btn-success">Export .xls</a>
             </h3>
             <table class="table table-bordered" width="100%" cellspacing="0">
                 <thead>
                     <tr>
+                        <th>Cover</th>
                         <th>Judul</th>
                         <th>Penulis</th>
                         <th>Penerbit</th>
@@ -30,6 +32,11 @@
                 <tbody>
                     {% for buku in books %}
                     <tr>
+                        <td align="center">
+                            {% if buku.cover %}
+                            <img src="{{ buku.cover.url }}" width="70px">
+                            {% endif %}
+                        </td>
                         <td><a href="{% url 'ubah_buku' buku.id %}">{{ buku.judul }}</a></td>
                         <td>{{ buku.penulis }}</td>
                         <td>{{ buku.penerbit }}</td>

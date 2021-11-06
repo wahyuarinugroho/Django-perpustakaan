@@ -1,10 +1,22 @@
-from django.shortcuts import redirect, render
+from django.http import response
+from django.shortcuts import redirect, render, HttpResponse
+from import_export import resources
 from perpustakaan.models import Buku, Kelompok
 from perpustakaan.forms import FormBuku
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.conf import settings
 from django.contrib.auth.forms import UserCreationForm
+from perpustakaan.resource import BukuResource
+
+def export_xlsx(request):
+    buku = BukuResource()
+    dataset = buku.export()
+    response = HttpResponse(dataset.xlsx, content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    response['Content-Disposition'] = 'attachment; filename=buku.xlsx'
+    return response
+
+
 
 @login_required(login_url=settings.LOGIN_URL)
 def signup(request):
@@ -29,7 +41,7 @@ def ubah_buku(request, id_buku):
     buku = Buku.objects.get(id=id_buku)
     template = 'ubah-buku.html'
     if request.POST:
-        form = FormBuku(request.POST, instance=buku)
+        form = FormBuku(request.POST, request.FILES, instance=buku)
         if form.is_valid():
             form.save()
             messages.success(request, "Data Berhasil Diperbaharui")
@@ -68,7 +80,7 @@ def penerbit(request):
 @login_required(login_url=settings.LOGIN_URL)
 def tambah_buku(request):
     if request.POST:
-        form = FormBuku(request.POST)
+        form = FormBuku(request.POST, request.FILES)
         if form.is_valid():
             form.save()
             form = FormBuku()

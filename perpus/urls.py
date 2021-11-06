@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.urls import path
 from perpustakaan.views import *
 from django.contrib.auth.views import LoginView, LogoutView
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -13,4 +14,8 @@ urlpatterns = [
     path('masuk/', LoginView.as_view(), name='masuk'),
     path('keluar/', LogoutView.as_view(next_page='masuk'), name='keluar'),
     path('signup/', signup, name='signup'),
+    path('export/xlsx', export_xlsx, name='export_xlsx'),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
