@@ -16,8 +16,6 @@ def export_xlsx(request):
     response['Content-Disposition'] = 'attachment; filename=buku.xlsx'
     return response
 
-
-
 @login_required(login_url=settings.LOGIN_URL)
 def signup(request):
     if request.POST:
