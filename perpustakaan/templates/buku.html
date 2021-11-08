@@ -17,6 +17,12 @@
                 <a href="{% url 'tambah_buku' %}" class="btn btn-primary">Tambah</a>
                 <a href="{% url 'export_xlsx' %}" class="btn btn-success">Export .xls</a>
             </h3>
+            <div class="mt-3 mb-3">
+                <form action="" method="post">
+                    {% csrf_token %}
+                    <input type="search" name="cari" placeholder="Search your books..." class="form-control">
+                </form>
+            </div>
             <table class="table table-bordered" width="100%" cellspacing="0">
                 <thead>
                     <tr>

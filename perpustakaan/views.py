@@ -1,13 +1,14 @@
-from django.http import response
+from decimal import Context
 from django.shortcuts import redirect, render, HttpResponse
-from import_export import resources
-from perpustakaan.models import Buku, Kelompok
+from perpustakaan.models import Buku
 from perpustakaan.forms import FormBuku
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.conf import settings
 from django.contrib.auth.forms import UserCreationForm
 from perpustakaan.resource import BukuResource
+from django.contrib.auth.models import User
+
 
 def export_xlsx(request):
     buku = BukuResource()
@@ -62,14 +63,19 @@ def hapus_buku(request, id_buku):
 
 @login_required(login_url=settings.LOGIN_URL)
 def buku(request):
-    # select * from buku a inner join kelompok b ON a.kelompok_id=b.id where b.name="produktif"
-    # books = Buku.objects.filter(kelompok_id__nama='Produktif')
-    #select * from buku
-    books = Buku.objects.all()
-    konteks = {
-        'books': books,
-    }
-    return render(request, 'buku.html', konteks)
+    if request.POST:
+        kata_kunci = request.POST['cari']
+        books = Buku.objects.filter(judul__contains=kata_kunci)
+        konteks = {
+            'books': books,
+        }
+        return render(request, 'buku.html', konteks)
+    else:
+        books = Buku.objects.all()
+        konteks = {
+            'books': books,
+        }
+        return render(request, 'buku.html', konteks)
 
 @login_required(login_url=settings.LOGIN_URL)
 def penerbit(request):
@@ -93,3 +99,21 @@ def tambah_buku(request):
             'form': form,
         }
     return render(request, 'tambah-buku.html', konteks)
+
+@login_required(login_url=settings.LOGIN_URL)
+def users(request):
+    if request.POST:
+        kata_kunci = request.POST['cari_user']
+        users = User.objects.filter(username__contains=kata_kunci)
+        template = 'users.html'
+        context = {
+            'users':users,
+        }
+        return render(request, template, context)
+    else:
+        users = User.objects.all()
+        template = 'users.html'
+        context = {
+            'users':users,
+        }
+        return render(request, template, context)

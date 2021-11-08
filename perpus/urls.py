@@ -22,6 +22,7 @@ urlpatterns = [
     path('keluar/', LogoutView.as_view(next_page='masuk'), name='keluar'),
     path('signup/', signup, name='signup'),
     path('export/xlsx', export_xlsx, name='export_xlsx'),
+    path('user/', users, name='users'),
 ]
 
 if settings.DEBUG:

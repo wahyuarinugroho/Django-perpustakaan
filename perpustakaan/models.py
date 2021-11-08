@@ -3,7 +3,6 @@ from django.db import models
 # Create your models here.
 class Kelompok(models.Model):
     nama = models.CharField(max_length=10)
-    # nama = models.TextField()
     keterangan = models.TextField(default='-')
 
     def __str__(self):
