@@ -1,4 +1,5 @@
 from decimal import Context
+from django.http import request
 from django.shortcuts import redirect, render, HttpResponse
 from perpustakaan.models import Buku
 from perpustakaan.forms import FormBuku
@@ -8,9 +9,28 @@ from django.conf import settings
 from django.contrib.auth.forms import UserCreationForm
 from perpustakaan.resource import BukuResource
 from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login
 
+def home(request):
+    template = 'home.html'
+    return render(request, template)
 
-def export_xlsx(request):
+def loginview(request):
+    context = {
+        'page_title': 'LOGIN',
+    }
+    if request.POST:
+        username_login = request.POST['username']
+        password_login = request.POST['password']
+        user = authenticate(request, username=username_login, password=password_login) 
+        if user is not None:
+            login(request, user)
+            return redirect('home')
+        else:
+            return redirect('login')
+    return render(request,'login.html', context)   
+
+def export_xlsx(request): 
     buku = BukuResource()
     dataset = buku.export()
     response = HttpResponse(dataset.xlsx, content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
