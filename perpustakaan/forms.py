@@ -1,6 +1,8 @@
 from django import forms
-from django.forms import ModelForm, widgets
+from django.forms import ModelForm, fields, widgets
 from perpustakaan.models import Buku
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
 
 class FormBuku(ModelForm):
     class Meta:
@@ -16,3 +18,38 @@ class FormBuku(ModelForm):
             'jumlah': forms.NumberInput({'class':'form-control','id':'input jumlah','placeholder':'input jumlah'}),
             'kelompok_id': forms.Select({'class':'form-control'}),
         }
+
+class SignUpForm(UserCreationForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['username'].widget.attrs.update ({
+            'type':'text',
+            'name':'username',
+            'class':'form-control form-control-user',
+            'id':'username',
+            'placeholder':'Username'
+        })
+        self.fields['email'].widget.attrs.update ({
+            'type':'email',
+            'name':'email',
+            'class':'form-control form-control-user',
+            'id':'email',
+            'placeholder':'Email Address'
+        })
+        self.fields['password1'].widget.attrs.update ({
+            'type':'password',
+            'name':'password1',
+            'class':'form-control form-control-user',
+            'id':'password1',
+            'placeholder':'Password'
+        })
+        self.fields['password2'].widget.attrs.update ({
+            'type':'password',
+            'name':'password2',
+            'class':'form-control form-control-user',
+            'id':'password2',
+            'placeholder':'Repeat Password'
+        })
+    class Meta:
+        model = User
+        fields = ['username','email','password1','password2']

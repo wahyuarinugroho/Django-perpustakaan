@@ -2,7 +2,7 @@ from decimal import Context
 from django.http import request
 from django.shortcuts import redirect, render, HttpResponse
 from perpustakaan.models import Buku
-from perpustakaan.forms import FormBuku
+from perpustakaan.forms import FormBuku, SignUpForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.conf import settings
@@ -11,6 +11,7 @@ from perpustakaan.resource import BukuResource
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
 
+@login_required(login_url=settings.LOGIN_URL)
 def home(request):
     template = 'home.html'
     return render(request, template)
@@ -40,20 +41,26 @@ def export_xlsx(request):
 @login_required(login_url=settings.LOGIN_URL)
 def signup(request):
     if request.POST:
-        form = UserCreationForm(request.POST)
+        form = SignUpForm(request.POST)
         if form.is_valid():
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password1')
             form.save()
-            messages.success(request,"user berhasil dibuat")
+            messages.success(request, "user berhasil di buat!")
+            new_user = authenticate(username=username, password=password)
+            if new_user is not None:
+                login(request, new_user)
+                return redirect('signup')
             return redirect('signup')
         else:
-            messages.error(request,"user gagal dibuat!")
+            messages.error(request, "terjadi kesalahan!")
             return redirect('signup')
     else:
-        form = UserCreationForm()
-        konteks = {
+        form = SignUpForm()
+        context = {
             'form' : form,
         }
-        return render(request, 'signup.html', konteks)
+    return render(request, 'signup.html', context)
 
 @login_required(login_url=settings.LOGIN_URL)
 def ubah_buku(request, id_buku):
