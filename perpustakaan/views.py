@@ -1,4 +1,5 @@
 from decimal import Context
+from django.contrib.auth import forms
 from django.http import request
 from django.shortcuts import redirect, render, HttpResponse
 from perpustakaan.models import Buku
@@ -47,10 +48,10 @@ def signup(request):
             password = form.cleaned_data.get('password1')
             form.save()
             messages.success(request, "user berhasil di buat!")
-            new_user = authenticate(username=username, password=password)
-            if new_user is not None:
-                login(request, new_user)
-                return redirect('signup')
+            # new_user = authenticate(username=username, password=password)
+            # if new_user is not None:
+            #     login(request, new_user)
+            #     return redirect('signup')
             return redirect('signup')
         else:
             messages.error(request, "terjadi kesalahan!")
@@ -86,6 +87,13 @@ def hapus_buku(request, id_buku):
     buku.delete()
     messages.success(request, "data berhasil dihapus")
     return redirect('buku')
+
+@login_required(login_url=settings.LOGIN_URL)
+def hapus_user(request, id_user):
+    user = User.objects.filter(id=id_user)
+    user.delete()
+    messages.success(request, "data user berhasil dihapus")
+    return redirect('users')
 
 
 @login_required(login_url=settings.LOGIN_URL)

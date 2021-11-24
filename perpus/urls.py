@@ -19,6 +19,7 @@ urlpatterns = [
     path('tambah-buku/', tambah_buku, name='tambah_buku'),
     path('buku/ubah/<int:id_buku>', ubah_buku, name='ubah_buku'),
     path('buku/hapus/<int:id_buku>', hapus_buku, name='hapus_buku'),
+    path('user/hapus/<int:id_user>', hapus_user, name='hapus_user'),
     path('login/', LoginView.as_view(), name='login'),
     path('logout/', LogoutView.as_view(next_page='login'), name='logout'),
     path('signup/', signup, name='signup'),
